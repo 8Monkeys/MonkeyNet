@@ -20,7 +20,7 @@ func TestInfoHashFromRandom(t *testing.T) {
 
 func TestInfoDefaultInit(t *testing.T) {
 	var i InfoHash
-	if i.Empty() {
+	if !i.Empty() {
 		t.Error("Default initialisation failed. Should be '0', was %s", i)
 	}
 }
@@ -33,12 +33,21 @@ func TestIoWriterImplementation(t *testing.T) {
 
 	for b := range buffers {
 		var i InfoHash
-		n, e := i.Write(buffers[b])
+		_, e := i.Write(buffers[b])
 		if e != nil {
-			t.Error("Error during writing to InfoHash: %v", e)
+			t.Error("Error during writing to InfoHash:", e)
 		}
-		if !(n <= len(buffers[b])) {
-			t.Error("Read more that given")
+		_, e = i.Write([]byte("just a test"))
+		if e == nil {
+			t.Error("No error when writing to already initialised InfoHash", e)
 		}
+	}
+}
+
+func TestWritingToInitializedInfoHash(t *testing.T) {
+	i, _ := NewRandom()
+	_, e := i.Write([]byte("a dummy"))
+	if e == nil {
+		t.Error("Failed to warn on writing to already initialised InfoHash:", e, "i was ", i)
 	}
 }

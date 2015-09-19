@@ -2,11 +2,7 @@ package libMonkey
 
 import (
 	"crypto/rand"
-	"errors"
-)
-
-var (
-	ErrAlreadyInitialized = errors.New("InfoHash object is already initialized")
+	"fmt"
 )
 
 type InfoHash [32]byte
@@ -26,8 +22,8 @@ func NewRandom() (InfoHash, error) {
 }
 
 func (i *InfoHash) Empty() bool {
-	for b := range i {
-		if b != 0 {
+	for it := range i {
+		if i[it] != 0 {
 			return false
 		}
 	}
@@ -35,8 +31,11 @@ func (i *InfoHash) Empty() bool {
 }
 
 func (i *InfoHash) Write(p []byte) (n int, err error) {
-	if i.Empty() {
-		return 0, ErrAlreadyInitialized
+	fmt.Printf("Trying to write '%s' to '%s'\n", p, i)
+
+	if !i.Empty() {
+		fmt.Printf("<Failed>\n\n")
+		return 0, fmt.Errorf("%s is an already initialized value", i)
 	}
 
 	it := 0
@@ -44,6 +43,8 @@ func (i *InfoHash) Write(p []byte) (n int, err error) {
 		i[it] = p[it]
 		it++
 	}
+
+	fmt.Printf("i is now '%s', remainder of p is '%s'\n\n", i, p[it:])
 
 	return it, nil
 }
