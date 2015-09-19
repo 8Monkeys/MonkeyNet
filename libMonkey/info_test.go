@@ -2,15 +2,43 @@ package libMonkey
 
 import "testing"
 
-func TestInfoHashCreation(t *testing.T) {
-	var null infoHash
-	_, i := newRandom()
-	_, j := newRandom()
+func TestInfoHashFromRandom(t *testing.T) {
+	i, e := NewRandom()
+	if e != nil {
+		t.Error("Failed to create InfoHash: %v", e)
+	}
 
-	if i == null || j == null {
-		t.Error("New infoHash objects must not be 0 when initialized by random")
+	j, e := NewRandom()
+
+	if i.Empty() || j.Empty() {
+		t.Error("New InfoHash objects must not be Empty when initialized by random")
 	}
 	if i == j {
-		t.Error("%v and %v must not be equal when generated with New()")
+		t.Error("%v and %v must not be equal when generated with New()", i, j)
+	}
+}
+
+func TestInfoDefaultInit(t *testing.T) {
+	var i InfoHash
+	if i.Empty() {
+		t.Error("Default initialisation failed. Should be '0', was %s", i)
+	}
+}
+
+func TestIoWriterImplementation(t *testing.T) {
+	buffers := [][]byte{
+		[]byte(""),
+		[]byte("1234567890"),
+		[]byte("1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")}
+
+	for b := range buffers {
+		var i InfoHash
+		n, e := i.Write(buffers[b])
+		if e != nil {
+			t.Error("Error during writing to InfoHash: %v", e)
+		}
+		if !(n <= len(buffers[b])) {
+			t.Error("Read more that given")
+		}
 	}
 }

@@ -1,19 +1,49 @@
 package libMonkey
 
-import "crypto/rand"
+import (
+	"crypto/rand"
+	"errors"
+)
 
-type infoHash [32]byte
+var (
+	ErrAlreadyInitialized = errors.New("InfoHash object is already initialized")
+)
 
-func newRandom() (error, infoHash) {
-	var newling infoHash
+type InfoHash [32]byte
+
+func NewRandom() (InfoHash, error) {
+	var newling InfoHash
 	b := make([]byte, 32)
 	_, err := rand.Read(b)
 	if err != nil {
-		return err, newling
+		return newling, err
 	}
 
 	for i := range b {
 		newling[i] = b[i]
+	}
+	return newling, nil
+}
+
+func (i *InfoHash) Empty() bool {
+	for b := range i {
+		if b != 0 {
+			return false
 		}
-	return nil, newling
+	}
+	return true
+}
+
+func (i *InfoHash) Write(p []byte) (n int, err error) {
+	if i.Empty() {
+		return 0, ErrAlreadyInitialized
+	}
+
+	it := 0
+	for it < len(p) && it < len(i) {
+		i[it] = p[it]
+		it++
+	}
+
+	return it, nil
 }
