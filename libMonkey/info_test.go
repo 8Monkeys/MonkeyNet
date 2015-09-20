@@ -1,6 +1,9 @@
 package libMonkey
 
-import "testing"
+import (
+	"math/rand"
+	"testing"
+)
 
 func TestInfoHashFromRandom(t *testing.T) {
 	i, e := NewRandom()
@@ -16,6 +19,23 @@ func TestInfoHashFromRandom(t *testing.T) {
 	if i == j {
 		t.Error("%v and %v must not be equal when generated with New()", i, j)
 	}
+}
+
+func BenchmarkMathGeneration(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		var iH InfoHash
+		for j := 0; j < 31; j++ {
+			iH[j] = byte(rand.Intn(256))
+		}
+	}
+}
+
+func BenchmarkCryptoGeneration(b *testing.B) {
+	var bencher InfoHash
+	for i := 0; i < b.N; i++ {
+		bencher, _ = NewRandom()
+	}
+	bencher.Empty()
 }
 
 func TestInfoDefaultInit(t *testing.T) {
