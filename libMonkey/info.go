@@ -2,6 +2,7 @@ package libMonkey
 
 import (
 	"crypto/rand"
+	"encoding/base64"
 	"fmt"
 )
 
@@ -43,4 +44,8 @@ func (i *InfoHash) Write(p []byte) (n int, err error) {
 	}
 
 	return it, nil
+}
+
+func (i *InfoHash) String() string {
+	return base64.StdEncoding.EncodeToString(i[:])
 }
