@@ -37,10 +37,6 @@ func TestIoWriterImplementation(t *testing.T) {
 		if e != nil {
 			t.Error("Error during writing to InfoHash:", e)
 		}
-		_, e = i.Write([]byte("just a test"))
-		if e == nil {
-			t.Error("No error when writing to already initialised InfoHash", e)
-		}
 	}
 }
 

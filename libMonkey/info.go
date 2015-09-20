@@ -31,11 +31,9 @@ func (i *InfoHash) Empty() bool {
 }
 
 func (i *InfoHash) Write(p []byte) (n int, err error) {
-	fmt.Printf("Trying to write '%s' to '%s'\n", p, i)
-
 	if !i.Empty() {
-		fmt.Printf("<Failed>\n\n")
 		return 0, fmt.Errorf("%s is an already initialized value", i)
+
 	}
 
 	it := 0
@@ -43,8 +41,6 @@ func (i *InfoHash) Write(p []byte) (n int, err error) {
 		i[it] = p[it]
 		it++
 	}
-
-	fmt.Printf("i is now '%s', remainder of p is '%s'\n\n", i, p[it:])
 
 	return it, nil
 }
