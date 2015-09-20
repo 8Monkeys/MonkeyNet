@@ -46,6 +46,10 @@ func (i *InfoHash) Write(p []byte) (n int, err error) {
 	return it, nil
 }
 
-func (i *InfoHash) String() string {
+func (i InfoHash) GoString() string {
 	return base64.StdEncoding.EncodeToString(i[:])
+}
+
+func (i InfoHash) String() string {
+	return i.GoString()
 }

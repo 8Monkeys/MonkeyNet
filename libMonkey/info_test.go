@@ -1,6 +1,7 @@
 package libMonkey
 
 import (
+	"fmt"
 	"math/rand"
 	"testing"
 )
@@ -65,5 +66,20 @@ func TestWritingToInitializedInfoHash(t *testing.T) {
 	_, e := i.Write([]byte("a dummy"))
 	if e == nil {
 		t.Error("Failed to warn on writing to already initialised InfoHash:", e, "i was ", i)
+	}
+}
+
+func TestFmtWriting(t *testing.T) {
+	for i := 0; i < 10; i++ {
+		iH, _ := NewRandom()
+		str := fmt.Sprintf("%v", iH)
+		if str == "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=" {
+			t.Errorf("Random InfoHashes must never yield AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=")
+		}
+	}
+	var empty InfoHash
+	str := fmt.Sprintf("%v", empty)
+	if str != "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=" {
+		t.Errorf("Empty InfoHash was %v (should be AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=", empty)
 	}
 }
