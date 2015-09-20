@@ -34,16 +34,25 @@ func (i *InfoHash) Empty() bool {
 func (i *InfoHash) Write(p []byte) (n int, err error) {
 	if !i.Empty() {
 		return 0, fmt.Errorf("%s is an already initialized value", i)
-
 	}
 
-	it := 0
-	for it < len(p) && it < len(i) {
-		i[it] = p[it]
-		it++
+	err = nil
+	var it, ti int
+	it = len(i)
+	if len(i) < len(p) {
+		n = len(i)
+		ti = len(i)
+	} else {
+		n = len(p)
+		ti = len(p)
+	}
+	for it > 0 && ti > 0 {
+		i[it-1] = p[ti-1]
+		it--
+		ti--
 	}
 
-	return it, nil
+	return
 }
 
 func (i InfoHash) GoString() string {

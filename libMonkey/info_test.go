@@ -49,14 +49,21 @@ func TestInfoHashDefaultInit(t *testing.T) {
 func TestInfoHashIoWriterImplementation(t *testing.T) {
 	buffers := [][]byte{
 		[]byte(""),
+		[]byte("00000000000000000000000000000000"),
+		[]byte("12345678901234567890123456789012"),
 		[]byte("1234567890"),
 		[]byte("1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")}
 
 	for b := range buffers {
 		var i InfoHash
+		t.Logf("Writing '% s' to '% s'", buffers[b], i[:])
 		_, e := i.Write(buffers[b])
+		t.Logf("Got '% s' == %v", i[:], i)
 		if e != nil {
 			t.Error("Error during writing to InfoHash:", e)
+		}
+		if len(buffers[b]) != 0 && i.Empty() {
+			t.Errorf("InfoHash still empty after writing %v to it.", buffers[b])
 		}
 	}
 }
