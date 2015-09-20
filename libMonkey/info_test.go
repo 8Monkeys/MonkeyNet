@@ -22,7 +22,7 @@ func TestInfoHashFromRandom(t *testing.T) {
 	}
 }
 
-func BenchmarkMathGeneration(b *testing.B) {
+func BenchmarkInfoHashMathRandGeneration(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var iH InfoHash
 		for j := 0; j < 31; j++ {
@@ -31,7 +31,7 @@ func BenchmarkMathGeneration(b *testing.B) {
 	}
 }
 
-func BenchmarkCryptoGeneration(b *testing.B) {
+func BenchmarkInfoHashCurrentRandomGeneration(b *testing.B) {
 	var bencher InfoHash
 	for i := 0; i < b.N; i++ {
 		bencher, _ = NewRandom()
@@ -39,14 +39,14 @@ func BenchmarkCryptoGeneration(b *testing.B) {
 	bencher.Empty()
 }
 
-func TestInfoDefaultInit(t *testing.T) {
+func TestInfoHashDefaultInit(t *testing.T) {
 	var i InfoHash
 	if !i.Empty() {
 		t.Error("Default initialisation failed. Should be '0', was %s", i)
 	}
 }
 
-func TestIoWriterImplementation(t *testing.T) {
+func TestInfoHashIoWriterImplementation(t *testing.T) {
 	buffers := [][]byte{
 		[]byte(""),
 		[]byte("1234567890"),
@@ -61,7 +61,7 @@ func TestIoWriterImplementation(t *testing.T) {
 	}
 }
 
-func TestWritingToInitializedInfoHash(t *testing.T) {
+func TestInfoHashWritingToInitialized(t *testing.T) {
 	i, _ := NewRandom()
 	_, e := i.Write([]byte("a dummy"))
 	if e == nil {
@@ -69,7 +69,7 @@ func TestWritingToInitializedInfoHash(t *testing.T) {
 	}
 }
 
-func TestFmtWriting(t *testing.T) {
+func TestInfoHashFmtWriting(t *testing.T) {
 	for i := 0; i < 10; i++ {
 		iH, _ := NewRandom()
 		str := fmt.Sprintf("%v", iH)
