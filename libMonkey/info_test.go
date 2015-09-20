@@ -109,3 +109,14 @@ func TestInfoHashXOR(t *testing.T) {
 		t.Error("hash XOR another must not equal one of them")
 	}
 }
+
+func TestInfoHashCommonPrefix(t *testing.T) {
+	var hash, empty InfoHash
+	if !(CommonPrefixLength(empty, empty) == 32*8) {
+		t.Error("Common prefix of empty hashes is 32*8 bits long")
+	}
+	hash.Write([]byte("1"))
+	if CommonPrefixLength(hash, empty) != 31*8 {
+		t.Error("")
+	}
+}
