@@ -55,6 +55,14 @@ func (i *InfoHash) Write(p []byte) (n int, err error) {
 	return
 }
 
+func (i InfoHash) Xor(another InfoHash) InfoHash {
+	var hash InfoHash
+	for b := range i {
+		hash[b] = i[b] ^ another[b]
+	}
+	return hash
+}
+
 func (i InfoHash) GoString() string {
 	return base64.StdEncoding.EncodeToString(i[:])
 }

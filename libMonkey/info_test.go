@@ -90,3 +90,22 @@ func TestInfoHashFmtWriting(t *testing.T) {
 		t.Errorf("Empty InfoHash was %v (should be AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=", empty)
 	}
 }
+
+func TestInfoHashXOR(t *testing.T) {
+	var hash, empty, another InfoHash
+	if !(empty.Xor(hash) == another) {
+		t.Error("empty XOR empty must always equal empty")
+	}
+	hash, _ = NewRandom()
+	if !(empty.Xor(hash) == hash) {
+		t.Error("empty XOR hash must always equal hash")
+	}
+	if !(hash.Xor(hash) == empty) {
+		t.Error("hash XOR hash must always equal hash")
+	}
+	another, _ = NewRandom()
+	xor := hash.Xor(another)
+	if xor == hash && xor == another {
+		t.Error("hash XOR another must not equal one of them")
+	}
+}
