@@ -115,8 +115,12 @@ func TestInfoHashCommonPrefix(t *testing.T) {
 	if !(CommonPrefixLength(empty, empty) == 32*8) {
 		t.Error("Common prefix of empty hashes is 32*8 bits long")
 	}
-	hash.Write([]byte("1"))
-	if CommonPrefixLength(hash, empty) != 31*8 {
-		t.Error("")
+	hash.Write([]byte("1")) // 1 == bx00110001
+	if CommonPrefixLength(hash, empty) != (31*8)+2 {
+		t.Errorf("%v\n%v\nCommon Prefix != 250", hash, empty)
+	}
+	empty.Write([]byte("O2")) // 4 == bx01001111, 2 == bx00110010
+	if CommonPrefixLength(hash, empty) != (30*8)+1 {
+		t.Errorf("%v\n%v\nCommon Prefix !=242", hash, empty)
 	}
 }

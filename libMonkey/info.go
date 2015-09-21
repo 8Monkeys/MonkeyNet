@@ -65,8 +65,18 @@ func (i InfoHash) Xor(another InfoHash) InfoHash {
 
 func CommonPrefixLength(a, b InfoHash) int {
 	var length, sum int
+	fmt.Printf("%#v\n%#v\n\n", a, b)
 	for length = 0; length < len(a); length++ {
 		if a[length] != b[length] {
+			bits := a[length] | b[length]
+			var i uint = 1
+			for i <= 8 {
+				if (bits >> i) == 0 {
+					sum += int(8 - i)
+					break
+				}
+				i++
+			}
 			break
 		} else {
 			sum += 8
@@ -76,9 +86,9 @@ func CommonPrefixLength(a, b InfoHash) int {
 }
 
 func (i InfoHash) GoString() string {
-	return base64.StdEncoding.EncodeToString(i[:])
+	return fmt.Sprintf("%#v", i[:])
 }
 
 func (i InfoHash) String() string {
-	return i.GoString()
+	return base64.StdEncoding.EncodeToString(i[:])
 }
