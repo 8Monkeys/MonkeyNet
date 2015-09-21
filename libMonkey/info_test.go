@@ -9,7 +9,7 @@ import (
 func TestInfoHashFromRandom(t *testing.T) {
 	i, e := NewRandom()
 	if e != nil {
-		t.Error("Failed to create InfoHash: %v", e)
+		t.Errorf("Failed to create InfoHash: %v", e)
 	}
 
 	j, e := NewRandom()
@@ -18,7 +18,7 @@ func TestInfoHashFromRandom(t *testing.T) {
 		t.Error("New InfoHash objects must not be Empty when initialized by random")
 	}
 	if i == j {
-		t.Error("%v and %v must not be equal when generated with New()", i, j)
+		t.Errorf("%v and %v must not be equal when generated with New()", i, j)
 	}
 }
 
@@ -42,7 +42,7 @@ func BenchmarkInfoHashCurrentRandomGeneration(b *testing.B) {
 func TestInfoHashDefaultInit(t *testing.T) {
 	var i InfoHash
 	if !i.Empty() {
-		t.Error("Default initialisation failed. Should be '0', was %s", i)
+		t.Errorf("Default initialisation failed. Should be '0', was %s", i)
 	}
 }
 

@@ -86,7 +86,6 @@ func (i InfoHash) Xor(another InfoHash) InfoHash {
 // bit-prefix both have in common.
 func CommonPrefixLength(a, b InfoHash) int {
 	var length, sum int
-	fmt.Printf("%#v\n%#v\n\n", a, b)
 	for length = 0; length < len(a); length++ {
 		if a[length] != b[length] {
 			bits := a[length] | b[length]
