@@ -10,4 +10,4 @@ before_script:
   - mkdir -p shippable/codecoverage
 
 script:
-  - go test -coverprofile=coverage.txt -covermode count ./
+  - go test -coverprofile=coverage.txt -covermode count ./libMonkey
