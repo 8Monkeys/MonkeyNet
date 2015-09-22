@@ -3,6 +3,7 @@ go:
   - release
 
 before_install:
+  - go get code.google.com/p/go.tools/cmd/cover
   - go get github.com/mattn/goveralls
 
 before_script:
