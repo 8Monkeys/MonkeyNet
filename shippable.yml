@@ -2,13 +2,21 @@ language: go
 go: 
   - release
 
+env:
+  - secure: BwK7pbe/iKsoWb3pv5vJZXGjUTpsWgBhbjzwVvISPyEWHNaGzuICPkmskjwE/nIzGhEB2AOMJummQ4dg3L4szzgUM5YDj6A6u4MsXb+fMdVpkb3Lu42WBezd4LfdilBSHt0WNMbqA/8rqrr3+vhnw4C88JSR8KJWQrOIYUZH1u3E6ERNEltkixJcU+60PdAgsKIsTpnBvKNVFVfqxvWJWsG/5i1Nw4NSAU/8S4cXPvScChliU5vbGta2v3WNkyo1lLgritMWIIV9XyZaRf5iuuh62HriE7RU3gBj7AHlS1DX7a2Mjn9XTPsMNOuVWdAx913RPBWZ9tjfj6ZqsruMOg==
+
 before_install:
+  - export PATH=$PATH:$GOPATH/bin
   - go get code.google.com/p/go.tools/cmd/cover
+  - go get -u github.com/jstemmer/go-junit-report
   - go get github.com/mattn/goveralls
+  - go get github.com/axw/gocov/gocov
 
 before_script:
   - mkdir -p shippable/testresults
   - mkdir -p shippable/codecoverage
 
 script:
-  - go test -coverprofile=coverage.txt -covermode count ./libMonkey
+  - go test -race -v -coverprofile=profile.cov -covermode=count ./libMonkey | go-junit-report > shippable/testresults/libMonkey.xml
+  - goveralls -coverprofile=profile.cov -repotoken $COVERALLS_TOKEN
+  - gocov convert profile.cov | gocov annotate - | gocov-xml > shippable/codecoverage/libMonkey.xml
