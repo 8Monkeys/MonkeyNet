@@ -21,4 +21,4 @@ before_script:
 script:
   - go test -race -v -coverprofile=profile.cov -covermode=count ./libMonkey | go-junit-report > shippable/testresults/libMonkey.xml
   - gocov convert profile.cov | gocov-xml > shippable/codecoverage/libMonkey.xml
-  - goveralls -coverprofile=profile.cov -repotoken $COVERALLS_TOKEN -service=travis-ci
+  - goveralls -coverprofile=profile.cov -service drone.io -repotoken $COVERALLS_TOKEN 
