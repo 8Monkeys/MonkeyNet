@@ -1,0 +1,24 @@
+language: go
+go: 
+  - release
+
+env:
+  global:
+    - secure: aXAz0ZdX7LH5WFIkU67Ui31JQNopEv4OnQCQ9yUx5MC69+XZPhfZR4+v3dm6cSbKj0wRFJZ6l2JZPUymW4evRTL2Wh6zUIkiiLJOJ1dR2+EqcsOel3/j5l7qfuHaO9Hf4I9sM4rpTftPq2sFA3bNVSP6VH+s0RsCn7k/A8ztuLOjFStwuVYc4s9TQquXreyJ8tkCYDa7YcRvlLGIsEqbmOgdYguAH/X22ckyC//Cl1p9nFDEAlHtCmI/SQnqEW8ZovLIlvOdxKRgRwpjwDKFpQbvPuaZOgfUsGQQ81UcBb7LUA8SoCMxJGKJASXcNrnBgIFmM/UAVKas8vWcCwyttg== 
+
+before_install:
+  - export PATH=$PATH:$GOPATH/bin
+  - go get code.google.com/p/go.tools/cmd/cover
+  - go get -u github.com/jstemmer/go-junit-report
+  - go get github.com/mattn/goveralls
+  - go get github.com/axw/gocov/gocov
+  - go get github.com/AlekSi/gocov-xml
+
+before_script:
+  - mkdir -p shippable/testresults
+  - mkdir -p shippable/codecoverage
+
+script:
+  - go test -race -v -coverprofile=profile.cov -covermode=count ./libMonkey | go-junit-report > shippable/testresults/libMonkey.xml
+  - gocov convert profile.cov | gocov-xml > shippable/codecoverage/libMonkey.xml
+  - goveralls -coverprofile=profile.cov -service drone.io -repotoken $COVERALLS_TOKEN 
