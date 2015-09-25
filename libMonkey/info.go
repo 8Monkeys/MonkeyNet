@@ -88,14 +88,14 @@ func CommonPrefixLength(a, b InfoHash) int {
 	var length, sum int
 	for length = 0; length < len(a); length++ {
 		if a[length] != b[length] {
-			i:=7
+			var i uint = 7
 			for i >= 0 {
-				if (a & (1<<i)) != (b & (1<<i)) {
-					sum += (8 - i)
+				if (a[length] & (1 << i)) != (b[length] & (1 << i)) {
 					break
 				}
-				i++
+				i--
 			}
+			sum += int(8 - i)
 			break
 		} else {
 			sum += 8
