@@ -1,0 +1,31 @@
+box: golang
+
+dev:
+    steps:
+        - internal/watch:
+            code: |
+              go test -v ./...
+            reload: true
+
+build:
+  steps:
+    - wercker/setup-go-workspace:
+        package-dir: github.com/8Monkeys/MonkeyNet
+    - wercker/golint
+
+    - script:
+        name: go get
+        code: |
+          go get -u github.com/mattn/goveralls
+          go get -u github.com/axw/gocov/gocov
+
+    - script:
+        name: go build
+        code: |
+          go build ./...
+
+    - script:
+        name: go test
+        code: |
+          go test -race -v -coverprofile=test.prof -covermode=count ./...
+          goveralls -coverprofile=test.prof -service wercker -repotoken $COVERALLS_TOKEN
