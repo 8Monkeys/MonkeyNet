@@ -9,13 +9,15 @@ dev:
 
 build:
   steps:
+    - wercker/setup-go-workspace:
+        package-dir: github.com/8Monkeys/MonkeyNet
     - wercker/golint
-    - script:
 
+    - script:
         name: go get
         code: |
           go get -u github.com/mattn/goveralls
-          go get github.com/axw/gocov/gocov
+          go get -u github.com/axw/gocov/gocov
 
     - script:
         name: go build
@@ -25,5 +27,5 @@ build:
     - script:
         name: go test
         code: |
-          go test -race -coverprofile=test.prof -covermode=count ./...
+          go test -race -v -coverprofile=test.prof -covermode=count ./...
           goveralls -coverprofile=test.prof -service wercker -repotoken $COVERALLS_TOKEN
