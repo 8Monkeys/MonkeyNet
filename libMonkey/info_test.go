@@ -117,7 +117,7 @@ func TestInfoHashCommonPrefix(t *testing.T) {
 	}
 	hash.Write([]byte("1")) // 1 == bx00110001
 	if CommonPrefixLength(hash, empty) != (31*8)+2 {
-		t.Errorf("%v\n%v\nCommon Prefix != 250", hash, empty)
+		t.Errorf("%x\n%x\nCommon Prefix != 250, was %d", hash, empty, CommonPrefixLength(hash, empty))
 	}
 	empty.Write([]byte("O2")) // 4 == bx01001111, 2 == bx00110010
 	if CommonPrefixLength(hash, empty) != (30*8)+1 {
