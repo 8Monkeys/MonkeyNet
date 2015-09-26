@@ -22,3 +22,14 @@ _testmain.go
 *.exe
 *.test
 *.prof
+
+# Wercker generated output
+_builds/
+_projects/
+_steps/
+
+# Linux-specifics
+
+*~
+.directory
+.Trash-*
