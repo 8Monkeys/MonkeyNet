@@ -10,11 +10,12 @@ dev:
 build:
   steps:
     - wercker/golint
-    #- script:
+    - script:
 
-     #   name: go get
-      #  code: |
-       #   go get
+        name: go get
+        code: |
+          go get -u github.com/mattn/goveralls
+          go get github.com/axw/gocov/gocov
 
     - script:
         name: go build
@@ -24,4 +25,5 @@ build:
     - script:
         name: go test
         code: |
-          go test ./...
+          go test -race -coverprofile=test.prof -covermode=count ./...
+          goveralls -coverprofile=test.prof -service wercker -repotoken $COVERALLS_TOKEN
