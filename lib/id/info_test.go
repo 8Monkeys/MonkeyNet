@@ -1,15 +1,15 @@
-package hashes
+package id
 
 import (
 	"testing"
 )
 
 func TestHashing(t *testing.T) {
-	info := getIdentifier([]byte("Testing String"))
+	info := FromRaw([]byte("Testing String"))
 	if info.data == nil {
 		t.Error("The Hash of something can't be nothing")
-		}
-	t.Logf("info of 'Testing String' is %v", info.data)
+	}
+	t.Logf("info of 'Testing String' is %#v", info.data)
 }
 
 //func TestInfoHashXOR(t *testing.T) {

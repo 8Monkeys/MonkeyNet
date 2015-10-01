@@ -1,20 +1,42 @@
-package hashes
+package id
 
 import (
+	"bytes"
+	"fmt"
+	"golang.org/x/crypto/sha3"
 	"hash"
-    "golang.org/x/crypto/sha3"
+	"io/ioutil"
+	"os"
 )
 
 var (
 	hashFunction hash.Hash = sha3.New256()
 )
 
-type InfoHash struct{
+type InfoHash struct {
 	data []byte
-	}
+}
 
-func getIdentifier(data []byte) InfoHash {
-	return InfoHash{hashFunction.Sum(data)}
+func FromRaw(data []byte) InfoHash {
+	return InfoHash{data: hashFunction.Sum(data)}
+}
+
+func FromFile(path string) (InfoHash, error) {
+	fileInfo, err := os.Lstat(path)
+	if err != nil {
+		panic(err)
+	}
+	if fileInfo.IsDir() {
+		panic("Expected to read a file, not a directory")
+	}
+	var b bytes.Buffer
+	b.Write([]byte(fileInfo.Name()))
+	b.Write([]byte(fmt.Sprintf("%d", fileInfo.Size())))
+	b.Write([]byte(fmt.Sprintf("%s", fileInfo.Mode())))
+	b.Write([]byte(fmt.Sprintf("%#v", fileInfo.ModTime())))
+	data, _ := ioutil.ReadFile(path)
+	b.Write(data)
+	return FromRaw(b.Bytes()), nil
 }
 
 // Xor is a function that xors two InfoHashes. This is needed for Kademlias XOR
